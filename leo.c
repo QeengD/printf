@@ -1,42 +1,28 @@
-
 #include "main.h"
 
 /**
- * get_precision - Calculates the precision for printing
- * @format: Formatted string in which to print the arguments
- * @i: List of arguments to be printed.
- * @list: list of arguments.
+ * leo - writes the character c to stdout
  *
- * Return: Precision.
+ * @bnr: array where is stored the binary.
+ * @oct: array where is stored the octal.
+ *
+ * Return: binary array.
  */
-int get_precision(const char *format, int *i, va_list list)
+char *leo(char *bnr, char *oct)
 {
-	int curr_i = *i + 1;
-	int precision = -1;
+	int op, i, j, ioct, limit;
 
-	if (format[curr_i] != '.')
-		return (precision);
-
-	precision = 0;
-
-	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
+	oct[11] = '\0';
+	for (i = 31, ioct = 10; i >= 0; i--, ioct--)
 	{
-		if (is_digit(format[curr_i]))
-		{
-			precision *= 10;
-			precision += format[curr_i] - '0';
-		}
-		else if (format[curr_i] == '*')
-		{
-			curr_i++;
-			precision = va_arg(list, int);
-			break;
-		}
+		if (i > 1)
+			limit = 4;
 		else
-			break;
+			limit = 2;
+		for (op = 0, j = 1; j <= limit; j *= 2, i--)
+			op = ((bnr[i] - '0') * j) + op;
+		i++;
+		oct[ioct] = op + '0';
 	}
-
-	*i = curr_i - 1;
-
-	return (precision);
+	return (oct);
 }

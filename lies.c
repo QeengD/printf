@@ -1,26 +1,28 @@
 #include "main.h"
 
 /**
- * get_size - Calculates the size to cast the argument
- * @format: Formatted string in which to print the arguments
- * @i: List of arguments to be printed.
+ * lies - calculates a short octal number
  *
- * Return: Precision.
+ * @bnr: array where is stored the binary.
+ * @oct: array where is stored the octal.
+ *
+ * Return: binary array.
  */
-int get_size(const char *format, int *i)
+char *lies(char *bnr, char *oct)
 {
-	int curr_i = *i + 1;
-	int size = 0;
+	int op, i, j, ioct, limit;
 
-	if (format[curr_i] == 'l')
-		size = S_LONG;
-	else if (format[curr_i] == 'h')
-		size = S_SHORT;
-
-	if (size == 0)
-		*i = curr_i - 1;
-	else
-		*i = curr_i;
-
-	return (size);
+	oct[6] = '\0';
+	for (i = 15, ioct = 5; i >= 0; i--, ioct--)
+	{
+		if (i > 0)
+			limit = 4;
+		else
+			limit = 1;
+		for (op = 0, j = 1; j <= limit; j *= 2, i--)
+			op = ((bnr[i] - '0') * j) + op;
+		i++;
+		oct[ioct] = op + '0';
+	}
+	return (oct);
 }
