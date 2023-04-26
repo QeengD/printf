@@ -1,18 +1,18 @@
 #include "main.h"
 
-void print_temp(chr temp[], int *buff_ind);
+void print_temp(char temp[], int *buff_ind);
 
 /**
  * _printf - Printf function
  * @format: format.
- * Return: Printed chrs.
+ * Return: Printed chars.
  */
-int _printf(const chr *format, ...)
+int _printf(const char *format, ...)
 {
-	int i, printed = 0, printed_chrs = 0;
+	int i, printed = 0, printed_chars = 0;
 	int switch, width, precision, size, buff_ind = 0;
 	va_list list;
-	chr temp[BUFF_SIZE];
+	char temp[BUFF_SIZE];
 
 	if (format == NULL)
 		return (-1);
@@ -27,7 +27,7 @@ int _printf(const chr *format, ...)
 			if (buff_ind == BUFF_SIZE)
 				print_temp(temp, &buff_ind);
 			/* write(1, &format[i], 1);*/
-			printed_chrs++;
+			printed_chars++;
 		}
 		else
 		{
@@ -41,7 +41,7 @@ int _printf(const chr *format, ...)
 				switch, width, precision, size);
 			if (printed == -1)
 				return (-1);
-			printed_chrs += printed;
+			printed_chars += printed;
 		}
 	}
 
@@ -49,15 +49,15 @@ int _printf(const chr *format, ...)
 
 	va_end(list);
 
-	return (printed_chrs);
+	return (printed_chars);
 }
 
 /**
  * print_temp - Prints the contents of the temp if it exist
- * @temp: Array of chrs
- * @buff_ind: Index at which to add next chr, represents the length.
+ * @temp: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
  */
-void print_temp(chr temp[], int *buff_ind)
+void print_temp(char temp[], int *buff_ind)
 {
 	if (*buff_ind > 0)
 		write(1, &temp[0], *buff_ind);
