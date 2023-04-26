@@ -1,42 +1,66 @@
 #include "main.h"
 
+void print_temp(chr temp[], int *buff_ind);
+
 /**
- * _printf - formatted output conversion and print data.
- * @format: input string.
- *
- * Return: number of chars printed.
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chrs.
  */
-int _printf(const char *format, ...)
+int _printf(const chr *format, ...)
 {
-	unsigned int i = 0, len = 0, ibuf = 0;
-	va_list arguments;
-	char *buffer;
+	int i, printed = 0, printed_chrs = 0;
+	int switch, width, precision, size, buff_ind = 0;
+	va_list list;
+	chr temp[BUFF_SIZE];
 
-	if (!format)
+	if (format == NULL)
 		return (-1);
 
-	va_start(arguments, format);
-	buffer = malloc(sizeof(char) * 1024);
+	va_start(list, format);
 
-	if (!buffer)
-		return (-1);
-
-	while (format[i])
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (format[i] == '%')
-			len += handle_conversion(format, &i, &ibuf, buffer, arguments);
+		if (format[i] != '%')
+		{
+			temp[buff_ind++] = format[i];
+			if (buff_ind == BUFF_SIZE)
+				print_temp(temp, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chrs++;
+		}
 		else
-			len += handle_char(format[i], &ibuf, buffer);
-
-		i++;
-		if (ibuf >= 1024)
-			len += print_buffer(buffer, &ibuf);
+		{
+			print_temp(temp, &buff_ind);
+			switch = get_switch(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
+			++i;
+			printed = handle_print(format, &i, list, temp,
+				switch, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chrs += printed;
+		}
 	}
 
-	len += print_buffer(buffer, &ibuf);
+	print_temp(temp, &buff_ind);
 
-	va_end(arguments);
-	free(buffer);
+	va_end(list);
 
-	return (len);
+	return (printed_chrs);
+}
+
+/**
+ * print_temp - Prints the contents of the temp if it exist
+ * @temp: Array of chrs
+ * @buff_ind: Index at which to add next chr, represents the length.
+ */
+void print_temp(chr temp[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &temp[0], *buff_ind);
+
+	*buff_ind = 0;
 }
