@@ -27,9 +27,9 @@ int _printf(const char *format, ...)
 		else
 		{
 			prnt_bufr(bufr, &buf_in);
-			flg = get_flg(format, &i);
+			flg = get_flags(format, &i);
 			width = get_width(format, &i, list);
-			precsn = get_precsn(format, &i, list);
+			precsn = get_precision(format, &i, list);
 			size = get_size(format, &i);
 			++i;
 			printed = handle_print(format, &i, list, bufr,
