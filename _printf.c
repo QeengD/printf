@@ -48,4 +48,4 @@ unsigned int i = 0, len = 0, ibuf = 0;
 	print_buf(buffer, ibuf), free(buffer), va_end(arguments);
 	return (len);
 }
-
+ 
